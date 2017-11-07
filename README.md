@@ -31,6 +31,7 @@
   - - [Recomended](#usage)
   - - [Using Object.assign](#using-object-assign)
   - - [Using your own merge](#using-your-own-merge)
+  - - [Understand the patch](#understand-the-patch)
   - [API](#api)
   - - [interface patch](#interface-patch)
   - - [function diff](#function-diff)
@@ -127,6 +128,61 @@ own merge function.
 let past = merge(futur, present.undo)
 let futur = merge(past, present.do)
 ```
+
+### Understand the patch
+
+Lets dig a bit futher into our understanding of the patch object.  
+The patch hold two properties, the do and the undo.
+
+Both are simple objects, ready to be merged with the current object to move
+forward or backward your changes.  
+Looking at do and undo, you will be able to understand what kind of operation it
+was performed on the object.  
+
+To sum up, there is only three kind of operation : insert, update, delete.
+
+We can easily write a function to return the kind of operation we performed on 
+a given key.
+
+```js
+function kind(patch, key) {
+  if(!(key in patch.do) && !(key in patch.undo)) {
+    return "kept"
+  } else if (patch.do[key] === undefined && patch.undo[key] !== undefined) {
+    return "deleted"
+  } else if (patch.do[key] !== undefined && patch.undo[key] === undefined) {
+    return "added"
+  } else {
+    return "updated"
+  }
+}
+```
+
+Here we are testing all the possibilities, by making a simple statement :
+> If for performing the do patch I need to make undefined the value and to apply
+> the undo patch I need a value, so at start I deleted the value
+
+As you see, we can simplify the statement with :
+> If for performing the do patch I need to make undefined the value,
+> so at start I deleted the value
+
+So, a more simple kind function could be the following one.
+
+```js
+function kind(patch, key) {
+  if(!(key in patch.do) && !(key in patch.undo)) {
+    return "kept"
+  } else if (patch.do[key] === undefined) {
+    return "deleted"
+  } else if (patch.undo[key] === undefined) {
+    return "added"
+  } else {
+    return "updated"
+  }
+}
+```
+
+Pretty easy !
 
 ## API
 
