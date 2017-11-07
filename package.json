@@ -27,6 +27,7 @@
     "format": "prettier --semi false --write 'src/**/*.js'",
     "minify": "uglifyjs dist/trdis.js -o dist/trdis.js --mangle --compress --source-map"
   },
+  "dependencies": {},
   "devDependencies": {
     "prettier": "^1.8.1",
     "rollup": "^0.50.0",
