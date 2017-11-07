@@ -25,11 +25,14 @@
     "build": "npm run bundle && npm run minify",
     "bundle": "rollup -i src/index.js -o dist/trdis.js -m -f umd -n trdis",
     "format": "prettier --semi false --write 'src/**/*.js'",
-    "minify": "uglifyjs dist/trdis.js -o dist/trdis.js --mangle --compress --source-map"
+    "minify": "uglifyjs dist/trdis.js -o dist/trdis.js --mangle --compress --source-map",
+    "publish": "git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish",
+    "release": "release minor && npm run publish && release"
   },
   "dependencies": {},
   "devDependencies": {
     "prettier": "^1.8.1",
+    "release": "^2.5.4",
     "rollup": "^0.50.0",
     "uglify-js": "^3.1.8"
   }
