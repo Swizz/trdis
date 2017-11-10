@@ -23,5 +23,10 @@ export function diff(from, to) {
     done[key] = true
   }
 
+  if (length in from || length in to) {
+    patch.do["length"] = to["length"]
+    patch.undo["length"] = from["length"]
+  }
+
   return patch
 }

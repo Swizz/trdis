@@ -161,3 +161,85 @@ describe("nested", () => {
     expect({ ...to, ...patch.undo }).toEqual(from)
   })
 })
+
+describe("array", () => {
+  test("diff added", () => {
+    const from = [1, 2]
+
+    const to = [1, 2, 3]
+
+    const patch = diff(from, to)
+
+    expect(patch.do).toEqual({
+      2: 3, length: 3
+    })
+
+    expect(patch.undo).toEqual({
+      2: undefined, length: 2
+    })
+
+    expect(Array.from({ ...from, ...patch.do })).toEqual(to)
+
+    expect(Array.from({ ...to, ...patch.undo })).toEqual(from)
+  })
+
+  test("diff deleted", () => {
+    const from = [1, 2]
+
+    const to = [1]
+
+    const patch = diff(from, to)
+
+    expect(patch.do).toEqual({
+      1: undefined, length: 1
+    })
+
+    expect(patch.undo).toEqual({
+      1: 2, length: 2
+    })
+
+    expect(Array.from({ ...from, ...patch.do })).toEqual(to)
+
+    expect(Array.from({ ...to, ...patch.undo })).toEqual(from)
+  })
+
+  test("diff updated", () => {
+    const from = [1, 2]
+
+    const to = [1, 1]
+
+    const patch = diff(from, to)
+
+    expect(patch.do).toEqual({
+      1: 1, length: 2
+    })
+
+    expect(patch.undo).toEqual({
+      1: 2, length: 2
+    })
+
+    expect(Array.from({ ...from, ...patch.do })).toEqual(to)
+
+    expect(Array.from({ ...to, ...patch.undo })).toEqual(from)
+  })
+
+  test("diff kept", () => {
+    const from = [1, 2]
+
+    const to = [1, 2]
+
+    const patch = diff(from, to)
+
+    expect(patch.do).toEqual({
+      length: 2
+    })
+
+    expect(patch.undo).toEqual({
+      length: 2
+    })
+
+    expect(Array.from({ ...from, ...patch.do })).toEqual(to)
+
+    expect(Array.from({ ...to, ...patch.undo })).toEqual(from)
+  })
+})

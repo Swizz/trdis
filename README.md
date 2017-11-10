@@ -21,8 +21,8 @@
 
 <br/>
 
-T(a)dis is a 264 Bytes `diff` function returning a patch object, allowing you to
-perform time traveling to an object using your own merge functions with ease.
+T(a)dis is a 290 Bytes `diff` function returning a patch object, allowing you to
+perform time traveling to an object or an array using your own merge functions with ease.
 
 ```js
 import { diff } from 'trdis'
@@ -58,6 +58,7 @@ const prevCar = {
    - [function diff](#function-diff-from-object-to-object--patch)
   - [Recipes](#recipes)
    - [Operation type](#operation-type)
+   - [Array time traveling](#array-time-traveling)
    - [Objects equality](#objects-equality)
    - [Object copy](#object-copy)
 </details>
@@ -87,7 +88,7 @@ JavaScript Package Manager.
 ## Usage
 
 The diff function is your way to obtain the patch object, the present.
-By providing both the source object, the past, and the target object, the future.
+By providing both the source object or array, the past, and the target object or array, the future.
 
 ```js
 const present = diff(past, future)
@@ -98,7 +99,7 @@ Both of them are mergeable objects. That way you are able to use your favorite
 merge function to apply the patch.  
 Lets use the objects spread operator as merge function.
 
-The undo object allow you to travel to the previous state of the object.
+The undo object allow you to travel to the previous state of the object or array.
 
 ```js
 const past = { ...future, ...present.undo }
@@ -113,7 +114,7 @@ const future = { ...past, ...present.do }
 Here we have seen that the do and the undo patch are compliant with the objects
 spread operator.  
 You are right! The both patch functions are plain object ready to overide the
-present object properties to apply the patch.
+present object or array properties to apply the patch.
 
 So as we discovered earlier every merge functions will a be great candidates as
 our patch function.
@@ -224,6 +225,22 @@ function kind(patch, key) {
 }
 ```
 
+### Array time traveling
+
+With T(a)rdis you are ready to time travel with an array too, as in JavaScript
+arrays are objects. T(a)rdis is aware of all array properties and will perform
+diff checking that allow you to reconscruct an array with ease.
+
+```js
+const past = [1, 2, 3]
+const future = [1, 2, 3, 4]
+
+const patch = diff(past, future)
+
+const present = Array.from({ ...past, ...patch.do }
+// present: (4)[1, 2, 3, 4]
+```
+
 ### Objects equality
 
 Just as said earlier, T(a)rdis help you to obtain a patch representing the
@@ -251,6 +268,7 @@ const from = { a: 1, b: 2 }
 const patch = diff(from, {})
 
 const copy = { ...from, ...patch.do, ...patch.undo }
+// copy: { a: 1, b:2 }
 ```
 
 
