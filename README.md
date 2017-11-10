@@ -21,6 +21,27 @@
 
 <br/>
 
+T(a)dis is a 264 Bytes `diff` function returning a patch object, allowing you to
+perform time traveling to an object using your own merge functions with ease.
+
+```js
+import { diff } from 'trdis'
+
+const patch = diff({
+  type: "Fiat", model: "Punto"
+}, {
+  type: "Fiat", model: "500", color: "red"
+})
+
+const newCar = {
+  type: "Fiat", model: "Punto", ...patch.do
+}
+
+const prevCar = {
+  type: "Fiat", model: "500", color: "red", ...patch.undo
+}
+```
+
 ## Table of Contents
 
 <details>
@@ -28,17 +49,17 @@
 
   - [Getting started](#getting-started)
   - [Usage](#usage)
-  - - [Recomended](#usage)
-  - - [Using Object.assign](#using-object-assign)
-  - - [Using your own merge](#using-your-own-merge)
-  - - [Understand the patch](#understand-the-patch)
+   - [Recomended](#usage)
+   - [Using Object.assign](#using-objectassign)
+   - [Using your own merge](#using-your-own-merge)
+   - [Understand the patch](#understand-the-patch)
   - [API](#api)
-  - - [interface patch](#interface-patch)
-  - - [function diff](#function-diff)
+   - [interface patch](#interface-patch--do-object-undo-object-)
+   - [function diff](#function-diff-from-object-to-object--patch)
   - [Recipes](#recipes)
-  - - [With dob](#with-dob)
-  - - [With hyperapp](#with-hyperapp)
-  - [Misc](#misc)
+   - [Operation type](#operation-type)
+   - [Objects equality](#objects-equality)
+   - [Object copy](#object-copy)
 </details>
 
 ## Getting started
@@ -66,10 +87,10 @@ JavaScript Package Manager.
 ## Usage
 
 The diff function is your way to obtain the patch object, the present.
-By providing both the source object, the past, and the target object, the futur.
+By providing both the source object, the past, and the target object, the future.
 
 ```js
-const present = diff(past, futur)
+const present = diff(past, future)
 ```
 
 The patch object will contain two properties the do and the undo inscructions.  
@@ -80,13 +101,13 @@ Lets use the objects spread operator as merge function.
 The undo object allow you to travel to the previous state of the object.
 
 ```js
-const past = { ...futur, ...present.undo }
+const past = { ...future, ...present.undo }
 ```
 
-Yes! You have understood! The do object is for the futur.
+Yes! You have understood! The do object is for the future.
 
 ```js
-const futur = { ...past, ...present.do }
+const future = { ...past, ...present.do }
 ```
 
 Here we have seen that the do and the undo patch are compliant with the objects
@@ -105,18 +126,18 @@ This function could be used in two way the first one will mutate the source obje
 and the second one, will use an empty object to create a copy.
 
 ```js
-Object.assign(present, futur.undo)
-Object.assign{present, futur.do)
+Object.assign(present, future.undo)
+Object.assign{present, future.do)
 ```
 
 Using Object.assign that way will mutate the present object acordingly to the 
-futur patch.
+future patch.
 
 The following one, will by opposition, create a new object by applying the patch.
 
 ```js
-let past = Object.assign({}, futur, present.undo)
-let futur = Object.assign({}, past, present.do)
+let past = Object.assign({}, future, present.undo)
+let future = Object.assign({}, past, present.do)
 ```
 
 ### Using your own merge
@@ -125,8 +146,8 @@ Now you understood, we are now able to generalise using only one function, your
 own merge function.
 
 ```js
-let past = merge(futur, present.undo)
-let futur = merge(past, present.do)
+let past = merge(future, present.undo)
+let future = merge(past, present.do)
 ```
 
 ### Understand the patch
@@ -141,8 +162,29 @@ was performed on the object.
 
 To sum up, there is only three kind of operation : insert, update, delete.
 
-We can easily write a function to return the kind of operation we performed on 
+## API
+
+#### interface patch: { do: object, undo: object }
+
+This is the patch object, it will hold two properties :
+
+ * do : The patch to use to apply the change to a previous state
+ * undo : The patch to use to undo the change from the current state
+
+#### function diff: (from: object, to: object) => patch
+
+The diff function will return the patch object by comparing the second object to
+the first one. The patch will help to undo the changes or to redo them later.
+
+## Recipes
+
+### Operation type
+
+Remember how we [understood the patch](#understand-the-patch) ?
+We seen we can easily write a function to return the kind of operation we performed on
 a given key.
+
+Lets try it.
 
 ```js
 function kind(patch, key) {
@@ -182,24 +224,38 @@ function kind(patch, key) {
 }
 ```
 
-Pretty easy !
+### Objects equality
 
-## API
+Just as said earlier, T(a)rdis help you to obtain a patch representing the
+differences between two objects.
 
-#### interface patch: { do: object, undo: object }
+Now, we are able to make a simple statement : 
+> If the diff of two objects is empty, this is because the two objects are equals!
 
-This is the patch object, it will hold two properties :
+```js
+function equality (a, b) {
+  const patch = diff(a, b)
+  return Object.keys(patch.do).length === 0 && Object.keys(patch.undo).length === 0
+}
+```
 
-| **do**   | The patch to use to apply the change to a previous state   |  
-| **undo** | The patch to use to undo the change from the current state |  
+### Object copy
 
-#### function diff: (from: object, to: object) => patch
+Using the patch returned the diff function of T(a)rdis, you are also able to perform
+a lot of amuzing kind of operation on you object.
 
-The diff function will return the patch object by comparing the second object to
-the first one. The patch will help to undo the changes or to redo them later.
+For example, you are able to create a copy of your source object, apply and undoing the patch!
+
+```js
+const from = { a: 1, b: 2 }
+const patch = diff(from, {})
+
+const copy = { ...from, ...patch.do, ...patch.undo }
+```
 
 
-## Misc
+**Pretty easy! Now, add yours!**
 
-- T(a)rdis follows the [Compatible Versioning: major.minor only](https://github.com/staltz/comver)
-convention.
+---
+
+T(a)rdis is made by Swizz.
