@@ -27,7 +27,7 @@
     "format": "prettier --semi false --write 'src/**/*.js'",
     "minify": "uglifyjs $npm_package_main -o $npm_package_main --mangle --compress --source-map",
     "push": "git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish",
-    "release": "npm run push && release --push",
+    "release": "npm run push && release --publish",
     "test": "jest"
   },
   "dependencies": {},
