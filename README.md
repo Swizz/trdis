@@ -253,9 +253,9 @@ diff checking that allow you to reconscruct an array with ease.
 const past = [1, 2, 3]
 const future = [1, 2, 3, 4]
 
-const patch = diff(past, future)
+const present = diff(past, future)
 
-const present = Array.from({ ...past, ...patch.do }
+const future = Array.from({ ...past, ...present.do })
 // present: (4)[1, 2, 3, 4]
 ```
 
