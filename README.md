@@ -300,4 +300,4 @@ const copy = { ...from, ...patch.do, ...patch.undo }
 
 ---
 
-T(a)rdis is made by Swizz.
+[T(a)rdis](https://github.com/Swizz/trdis) is made by [Swizz](https://github.com/Swizz).
