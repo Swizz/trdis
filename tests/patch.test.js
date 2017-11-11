@@ -111,6 +111,10 @@ describe("array", () => {
     expect(Array.from(patch(from, future.do))).toEqual(to)
 
     expect(Array.from(patch(to, future.undo))).toEqual(from)
+
+    expect(patch(from, future.do, true)).toEqual(to)
+
+    expect(patch(to, future.undo, true)).toEqual(from)
   })
 
   test("patch deleted", () => {
@@ -123,6 +127,10 @@ describe("array", () => {
     expect(Array.from(patch(from, future.do))).toEqual(to)
 
     expect(Array.from(patch(to, future.undo))).toEqual(from)
+
+    expect(patch(from, future.do, true)).toEqual(to)
+
+    expect(patch(to, future.undo, true)).toEqual(from)
   })
 
   test("patch updated", () => {
@@ -135,6 +143,10 @@ describe("array", () => {
     expect(Array.from(patch(from, future.do))).toEqual(to)
 
     expect(Array.from(patch(to, future.undo))).toEqual(from)
+
+    expect(patch(from, future.do, true)).toEqual(to)
+
+    expect(patch(to, future.undo, true)).toEqual(from)
   })
 
   test("patch kept", () => {
@@ -147,5 +159,21 @@ describe("array", () => {
     expect(Array.from(patch(from, future.do))).toEqual(to)
 
     expect(Array.from(patch(to, future.undo))).toEqual(from)
+
+    expect(patch(from, future.do, true)).toEqual(to)
+
+    expect(patch(to, future.undo, true)).toEqual(from)
+  })
+
+  test("do not transform object", () => {
+    const from = { a: 1, b: 1 }
+
+    const to = { a: 1, b: 2, c: 3 }
+
+    const future = diff(from, to)
+
+    expect(patch(from, future.do, true)).toEqual(to)
+
+    expect(patch(to, future.undo, true)).toEqual(from)
   })
 })

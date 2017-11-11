@@ -31,7 +31,7 @@ export function diff(from, to) {
   return patch
 }
 
-export function patch(from, diff) {
+export function patch(from, diff, array) {
   var to = {}
   for (var key in from) {
     to[key] = from[key]
@@ -39,5 +39,5 @@ export function patch(from, diff) {
   for (var key in diff) {
     to[key] = diff[key]
   }
-  return to
+  return array && "length" in to ? Array.from(to) : to
 }
