@@ -31,13 +31,19 @@ export function diff(from, to) {
   return patch
 }
 
-export function patch(from, diff, array) {
+export function patch(from, diff, array, clean) {
   var to = {}
   for (var key in from) {
-    to[key] = from[key]
+    if (!(clean && from[key] === undefined)) {
+      to[key] = from[key]
+    }
   }
   for (var key in diff) {
-    to[key] = diff[key]
+    if (!(clean && diff[key] === undefined)) {
+      to[key] = diff[key]
+    } else {
+      delete to[key]
+    }
   }
   return array && "length" in to ? Array.from(to) : to
 }

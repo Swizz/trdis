@@ -56,7 +56,7 @@ const prevCar = {
   - [API](#api)
    - [interface patch](#interface-patch--do-object-undo-object-)
    - [function diff](#function-diff-from-object-array-to-object-array--patch)
-   - [function patch](#function-patch-from-object-array-diff-patch--object)
+   - [function patch](#function-patch-from-object-array-diff-patch-array-boolean-clean-boolean--object-array)
   - [Recipes](#recipes)
    - [Operation type](#operation-type)
    - [Array time traveling](#array-time-traveling)
@@ -126,6 +126,9 @@ T(a)rdis provide you a patch function, ready to counter all the T(a)rdis diff
 function features. This function is aligned with the diff signature to allow you
 to take all benefits of T(a)rdis with a sanitized experience.
 
+The patch function provide an option to automatically return well structured arrays ;
+and another one to remove undefined/deleted properties.
+
 ```js
 let past = patch(future, present.undo)
 let future = patch(past, present.do)
@@ -189,11 +192,14 @@ This is the patch object, it will hold two properties :
 The diff function will return the patch object by comparing the second object to
 the first one. The patch will help to undo the changes or to redo them later.
 
-#### function patch: (from: object | array, diff: patch) => object
+#### function patch: (from: object | array, diff: patch, array: boolean, clean: boolean) => object | array
 
 The patch function is an helpful function to merge the from object with the given
-diff patch. Object will be merge into a new object. The patch function return
-an object with all the keys, the deleted properties will appear as undefined.
+diff patch. Object will be merge into a new object.  
+If the array paramter is set to true, arrays will be automatically returned.
+
+The patch function return an object with all the keys, the deleted properties will
+appear as undefined, unless you set the clean parameter to true.
 
 ## Recipes
 
