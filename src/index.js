@@ -30,3 +30,14 @@ export function diff(from, to) {
 
   return patch
 }
+
+export function patch(from, diff) {
+  var to = {}
+  for (var key in from) {
+    to[key] = from[key]
+  }
+  for (var key in diff) {
+    to[key] = diff[key]
+  }
+  return to
+}

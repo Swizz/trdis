@@ -55,7 +55,8 @@ const prevCar = {
    - [Understand the patch](#understand-the-patch)
   - [API](#api)
    - [interface patch](#interface-patch--do-object-undo-object-)
-   - [function diff](#function-diff-from-object-to-object--patch)
+   - [function diff](#function-diff-from-object-array-to-object-array--patch)
+   - [function patch](#function-patch-from-object-array-diff-patch--object)
   - [Recipes](#recipes)
    - [Operation type](#operation-type)
    - [Array time traveling](#array-time-traveling)
@@ -119,6 +120,17 @@ present object or array properties to apply the patch.
 So as we discovered earlier every merge functions will a be great candidates as
 our patch function.
 
+### Using patch function
+
+T(a)rdis provide you a patch function, ready to counter all the T(a)rdis diff
+function features. This function is aligned with the diff signature to allow you
+to take all benefits of T(a)rdis with a sanitized experience.
+
+```js
+let past = patch(future, present.undo)
+let future = patch(past, present.do)
+```
+
 ### Using Object.assign
 
 Object.assign is a JS function used to copy the values from one (or more) object(s)
@@ -172,10 +184,16 @@ This is the patch object, it will hold two properties :
  * do : The patch to use to apply the change to a previous state
  * undo : The patch to use to undo the change from the current state
 
-#### function diff: (from: object, to: object) => patch
+#### function diff: (from: object | array, to: object | array) => patch
 
 The diff function will return the patch object by comparing the second object to
 the first one. The patch will help to undo the changes or to redo them later.
+
+#### function patch: (from: object | array, diff: patch) => object
+
+The patch function is an helpful function to merge the from object with the given
+diff patch. Object will be merge into a new object. The patch function return
+an object with all the keys, the deleted properties will appear as undefined.
 
 ## Recipes
 
