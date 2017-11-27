@@ -162,6 +162,108 @@ describe("nested", () => {
   })
 })
 
+describe("nested true", () => {
+  test("diff added", () => {
+    const from = { a: 1, b: { a: 1, b: 2 } }
+
+    const to = { a: 1, b: { a: 1, b: 2, c: 3 } }
+
+    const patch = diff(from, to, true)
+
+    expect(patch.do).toEqual({
+      b: { c: 3 }
+    })
+
+    expect(patch.undo).toEqual({
+      b: { c: undefined }
+    })
+
+    const future = { ...from, ...patch.do }
+    future.b = { ...from.b, ...patch.do.b }
+
+    expect(future).toEqual(to)
+
+    const past = { ...from, ...patch.undo }
+    past.b = { ...from.b, ...patch.undo.b }
+
+    expect(past).toEqual(from)
+  })
+
+  test("diff deleted", () => {
+    const from = { a: 1, b: { a: 1, b: 2 } }
+
+    const to = { a: 1, b: { a: 1 } }
+
+    const patch = diff(from, to, true)
+
+    expect(patch.do).toEqual({
+      b: { b: undefined }
+    })
+
+    expect(patch.undo).toEqual({
+      b: { b: 2 }
+    })
+
+    const future = { ...from, ...patch.do }
+    future.b = { ...from.b, ...patch.do.b }
+
+    expect(future).toEqual(to)
+
+    const past = { ...from, ...patch.undo }
+    past.b = { ...from.b, ...patch.undo.b }
+
+    expect(past).toEqual(from)
+  })
+
+  test("diff updated", () => {
+    const from = { a: 1, b: { a: 1, b: 2 } }
+
+    const to = { a: 1, b: { a: 1, b: 1 } }
+
+    const patch = diff(from, to, true)
+
+    expect(patch.do).toEqual({
+      b: { b: 1 }
+    })
+
+    expect(patch.undo).toEqual({
+      b: { b: 2 }
+    })
+
+    const future = { ...from, ...patch.do }
+    future.b = { ...from.b, ...patch.do.b }
+
+    expect(future).toEqual(to)
+
+    const past = { ...from, ...patch.undo }
+    past.b = { ...from.b, ...patch.undo.b }
+
+    expect(past).toEqual(from)
+  })
+
+  test("diff kept", () => {
+    const from = { a: 1, b: { a: 1, b: 2 } }
+
+    const to = { a: 1, b: { a: 1, b: 2 } }
+
+    const patch = diff(from, to, true)
+
+    expect(patch.do).toEqual({})
+
+    expect(patch.undo).toEqual({})
+
+    const future = { ...from, ...patch.do }
+    future.b = { ...from.b, ...patch.do.b }
+
+    expect(future).toEqual(to)
+
+    const past = { ...from, ...patch.undo }
+    past.b = { ...from.b, ...patch.undo.b }
+
+    expect(past).toEqual(from)
+  })
+})
+
 describe("array", () => {
   test("diff added", () => {
     const from = [1, 2]

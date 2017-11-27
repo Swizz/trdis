@@ -21,7 +21,7 @@
 
 <br/>
 
-T(a)dis is a 290 Bytes `diff` function returning a patch object, allowing you to
+T(a)dis is a 350 Bytes `diff` function returning a patch object, allowing you to
 perform time traveling to an object or an array using your own merge functions with ease.
 
 ```js
@@ -55,8 +55,8 @@ const prevCar = {
     - [Understand the patch](#understand-the-patch)
   - [API](#api)
     - [interface patch](#interface-patch--do-object-undo-object-)
-    - [function diff](#function-diff-from-object--array-to-object--array--patch)
-    - [function patch](#function-patch-from-object--array-diff-patch-array-boolean-clean-boolean--object--array)
+    - [function diff](#function-diff-from-object--array-to-object--array-deep-boolean--patch)
+    - [function patch](#function-patch-from-object--array-diff-patch-deep-boolean-array-boolean-clean-boolean--object--array)
   - [Recipes](#recipes)
     - [Operation type](#operation-type)
     - [Array time traveling](#array-time-traveling)
@@ -187,16 +187,17 @@ This is the patch object, it will hold two properties :
  * do : The patch to use to apply the change to a previous state
  * undo : The patch to use to undo the change from the current state
 
-#### function diff: (from: object | array, to: object | array) => patch
+#### function diff: (from: object | array, to: object | array, deep: boolean) => patch
 
 The diff function will return the patch object by comparing the second object to
-the first one. The patch will help to undo the changes or to redo them later.
+the first one. The patch will help to undo the changes or to redo them later.  
+The deep paramater allow you to create a deep patch object of nested objects.
 
-#### function patch: (from: object | array, diff: patch, array: boolean, clean: boolean) => object | array
+#### function patch: (from: object | array, diff: patch, deep: boolean, array: boolean, clean: boolean) => object | array
 
 The patch function is an helpful function to merge the from object with the given
 diff patch. Object will be merge into a new object.  
-If the array paramter is set to true, arrays will be automatically returned.
+If the array parameter is set to true, arrays will be automatically returned.
 
 The patch function return an object with all the keys, the deleted properties will
 appear as undefined, unless you set the clean parameter to true.

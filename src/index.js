@@ -1,4 +1,4 @@
-export function diff(from, to) {
+export function diff(from, to, deep) {
   var done = {}
   var patch = {
     do: {},
@@ -8,8 +8,17 @@ export function diff(from, to) {
   for (var key in to) {
     if (key in done || from[key] === to[key]) continue
 
-    patch.do[key] = to[key]
-    patch.undo[key] = from[key]
+    if (deep && (typeof from[key] === "object" || typeof to[key] === "object")) {
+      var deep_patch = diff(from[key], to[key], deep)
+
+      if (Object.keys(deep_patch.do).length) {
+        patch.do[key] = deep_patch.do
+        patch.undo[key] = deep_patch.undo
+      }
+    } else {
+      patch.do[key] = to[key]
+      patch.undo[key] = from[key]
+    }
 
     done[key] = true
   }
@@ -31,7 +40,7 @@ export function diff(from, to) {
   return patch
 }
 
-export function patch(from, diff, array, clean) {
+export function patch(from, diff, deep, array, clean) {
   var to = {}
   for (var key in from) {
     if (!(clean && from[key] === undefined)) {
@@ -40,7 +49,11 @@ export function patch(from, diff, array, clean) {
   }
   for (var key in diff) {
     if (!(clean && diff[key] === undefined)) {
-      to[key] = diff[key]
+      if (deep && typeof diff[key] === "object") {
+        to[key] = patch(to[key], diff[key], deep, array, clean)
+      } else {
+        to[key] = diff[key]
+      }
     } else {
       delete to[key]
     }
