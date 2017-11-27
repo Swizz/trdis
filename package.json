@@ -1,0 +1,37 @@
+{
+  "name": "trdis",
+  "version": "0.5.1",
+  "description": "The most known way to travel in space and time",
+  "license": "MIT",
+  "repository": "Swizz/trdis",
+  "author": "Quentin Gerodel",
+  "keywords": [
+    "trdis",
+    "timetravel",
+    "object",
+    "state",
+    "do",
+    "undo",
+    "diff",
+    "json"
+  ],
+  "main": "index.html",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "scripts": {
+    "build": "npm run bundle && npm run minify",
+    "bundle": "rollup -i $npm_package_module -o $npm_package_main -m -f umd -n $npm_package_name",
+    "format": "prettier --semi false --write 'src/**/*.js'",
+    "minify": "uglifyjs $npm_package_main -o $npm_package_main --mangle --compress --source-map",
+    "prepare": "npm run build",
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "prettier": "^1.8.1",
+    "rollup": "^0.50.0",
+    "uglify-js": "^3.1.8"
+  },
+  "private": true
+}
