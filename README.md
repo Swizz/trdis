@@ -1,13 +1,17 @@
 
+<p align="center">
+  <img src="https://i.imgur.com/5aXQqE1.png" alt="t(a)rdis header">
+</p>
+
 <h1 align="center"> T(a)rdis </h1>
 
-<div align="center">
+<p align="center">
   The <bold>most known way</bold> to travel in <italic>space and time</italic>
-</div>
+</p>
 
 <br/>
 
-<div align="center">
+<p align="center">
   <a href="https://www.npmjs.com/package/trdis">
     <img src="https://img.shields.io/npm/v/trdis.svg?label=release&style=flat-square" alt="npm version"/>
   </a>
@@ -17,7 +21,7 @@
   <a href="https://travis-ci.org/Swizz/trdis">
     <img src="https://img.shields.io/travis/Swizz/trdis/develop.svg?style=flat-square" alt="travis build"/>
   </a>
-</div>
+</p>
 
 <br/>
 
@@ -143,7 +147,7 @@ and the second one, will use an empty object to create a copy.
 
 ```js
 Object.assign(present, future.undo)
-Object.assign{present, future.do)
+Object.assign(present, future.do)
 ```
 
 Using Object.assign that way will mutate the present object acordingly to the 
