@@ -25,7 +25,7 @@
 
 <br/>
 
-T(a)dis is a 350 Bytes `diff` function returning a patch object, allowing you to
+T(a)rdis is a 350 Bytes `diff` function returning a patch object, allowing you to
 perform time traveling to an object or an array using your own merge functions with ease.
 
 ```js
