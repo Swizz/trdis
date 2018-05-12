@@ -17,17 +17,17 @@
   ],
   "main": "dist/trdis.js",
   "module": "src/index.js",
-  "files": [
-    "src",
-    "dist"
-  ],
+  "files": ["src", "dist"],
   "scripts": {
     "build": "npm run bundle && npm run minify",
-    "bundle": "rollup -i $npm_package_module -o $npm_package_main -m -f umd -n $npm_package_name",
+    "bundle":
+      "rollup -i $npm_package_module -o $npm_package_main -m -f umd -n $npm_package_name",
     "format": "prettier --semi false --write 'src/**/*.js'",
-    "minify": "uglifyjs $npm_package_main -o $npm_package_main --mangle --compress --source-map",
+    "minify":
+      "uglifyjs $npm_package_main -o $npm_package_main --mangle --compress --source-map",
     "prepare": "npm run build",
-    "push": "git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish",
+    "push":
+      "git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish",
     "release": "npm run push && release --publish",
     "test": "jest --coverage"
   },
