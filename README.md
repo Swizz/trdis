@@ -1,4 +1,3 @@
-
 <p align="center">
   <img src="https://i.imgur.com/5aXQqE1.png" alt="t(a)rdis header">
 </p>
@@ -29,21 +28,32 @@ T(a)rdis is a 350 Bytes `diff` function returning a patch object, allowing you t
 perform time traveling to an object or an array using your own merge functions with ease.
 
 ```js
-import { diff } from 'trdis'
+import { diff } from "trdis";
 
-const patch = diff({
-  type: "Fiat", model: "Punto"
-}, {
-  type: "Fiat", model: "500", color: "red"
-})
+const patch = diff(
+  {
+    type: "Fiat",
+    model: "Punto"
+  },
+  {
+    type: "Fiat",
+    model: "500",
+    color: "red"
+  }
+);
 
 const newCar = {
-  type: "Fiat", model: "Punto", ...patch.do
-}
+  type: "Fiat",
+  model: "Punto",
+  ...patch.do
+};
 
 const prevCar = {
-  type: "Fiat", model: "500", color: "red", ...patch.undo
-}
+  type: "Fiat",
+  model: "500",
+  color: "red",
+  ...patch.undo
+};
 ```
 
 ## Table of Contents
@@ -51,27 +61,24 @@ const prevCar = {
 <details>
 <summary>Table of Contents</summary>
 
-  - [Getting started](#getting-started)
-  - [Usage](#usage)
-    - [Recomended](#usage)
-    - [Using Object.assign](#using-objectassign)
-    - [Using your own merge](#using-your-own-merge)
-    - [Understand the patch](#understand-the-patch)
-  - [API](#api)
-    - [interface patch](#interface-patch--do-object-undo-object-)
-    - [function diff](#function-diff-from-object--array-to-object--array-deep-boolean--patch)
-    - [function patch](#function-patch-from-object--array-diff-patch-deep-boolean-array-boolean-clean-boolean--object--array)
-  - [Recipes](#recipes)
-    - [Operation type](#operation-type)
-    - [Array time traveling](#array-time-traveling)
-    - [Objects equality](#objects-equality)
-    - [Object copy](#object-copy)
-</details>
+* [Getting started](#getting-started)
+* [Usage](#usage)
+  * [Recomended](#usage)
+  * [Using Object.assign](#using-objectassign)
+  * [Using your own merge](#using-your-own-merge)
+  * [Understand the patch](#understand-the-patch)
+* [API](#api)
+  * [interface patch](#interface-patch--do-object-undo-object-)
+  * [function diff](#function-diff-from-object--array-to-object--array-deep-boolean--patch)
+  * [function patch](#function-patch-from-object--array-diff-patch-deep-boolean-array-boolean-clean-boolean--object--array)
+* [Recipes](#recipes) - [Operation type](#operation-type) - [Array time traveling](#array-time-traveling) - [Objects equality](#objects-equality) - [Object copy](#object-copy)
+  </details>
 
 ## Getting started
 
-- **1.** To use T(a)rdis you need to download it thanks to your favorite
-JavaScript Package Manager.
+* **1.** To use T(a)rdis you need to download it thanks to your favorite
+  JavaScript Package Manager.
+
   ```sh
   yarn add trdis
   ```
@@ -80,14 +87,15 @@ JavaScript Package Manager.
   npm install --save trdis
   ```
 
-- **2.** Now you need to import explicitly the exported `diff` function.
+* **2.** Now you need to import explicitly the exported `diff` function.
+
   ```js
-  import { diff } from 'trdis'
+  import { diff } from "trdis";
   ```
 
-- **3.** Use the diff function to generate the patch object.
+* **3.** Use the diff function to generate the patch object.
   ```js
-  const patch = diff(from, to)
+  const patch = diff(from, to);
   ```
 
 ## Usage
@@ -96,7 +104,7 @@ The diff function is your way to obtain the patch object, the present.
 By providing both the source object or array, the past, and the target object or array, the future.
 
 ```js
-const present = diff(past, future)
+const present = diff(past, future);
 ```
 
 The patch object will contain two properties the do and the undo inscructions.  
@@ -107,13 +115,13 @@ Lets use the objects spread operator as merge function.
 The undo object allow you to travel to the previous state of the object or array.
 
 ```js
-const past = { ...future, ...present.undo }
+const past = { ...future, ...present.undo };
 ```
 
 Yes! You have understood! The do object is for the future.
 
 ```js
-const future = { ...past, ...present.do }
+const future = { ...past, ...present.do };
 ```
 
 Here we have seen that the do and the undo patch are compliant with the objects
@@ -134,8 +142,8 @@ The patch function provide an option to automatically return well structured arr
 and another one to remove undefined/deleted properties.
 
 ```js
-let past = patch(future, present.undo)
-let future = patch(past, present.do)
+let past = patch(future, present.undo);
+let future = patch(past, present.do);
 ```
 
 ### Using Object.assign
@@ -146,18 +154,18 @@ This function could be used in two way the first one will mutate the source obje
 and the second one, will use an empty object to create a copy.
 
 ```js
-Object.assign(present, future.undo)
-Object.assign(present, future.do)
+Object.assign(present, future.undo);
+Object.assign(present, future.do);
 ```
 
-Using Object.assign that way will mutate the present object acordingly to the 
+Using Object.assign that way will mutate the present object acordingly to the
 future patch.
 
 The following one, will by opposition, create a new object by applying the patch.
 
 ```js
-let past = Object.assign({}, future, present.undo)
-let future = Object.assign({}, past, present.do)
+let past = Object.assign({}, future, present.undo);
+let future = Object.assign({}, past, present.do);
 ```
 
 ### Using your own merge
@@ -166,8 +174,8 @@ Now you understood, we are now able to generalise using only one function, your
 own merge function.
 
 ```js
-let past = merge(future, present.undo)
-let future = merge(past, present.do)
+let past = merge(future, present.undo);
+let future = merge(past, present.do);
 ```
 
 ### Understand the patch
@@ -178,7 +186,7 @@ The patch hold two properties, the do and the undo.
 Both are simple objects, ready to be merged with the current object to move
 forward or backward your changes.  
 Looking at do and undo, you will be able to understand what kind of operation it
-was performed on the object.  
+was performed on the object.
 
 To sum up, there is only three kind of operation : insert, update, delete.
 
@@ -188,8 +196,8 @@ To sum up, there is only three kind of operation : insert, update, delete.
 
 This is the patch object, it will hold two properties :
 
- * do : The patch to use to apply the change to a previous state
- * undo : The patch to use to undo the change from the current state
+* do : The patch to use to apply the change to a previous state
+* undo : The patch to use to undo the change from the current state
 
 #### function diff: (from: object | array, to: object | array, deep: boolean) => patch
 
@@ -218,23 +226,25 @@ Lets try it.
 
 ```js
 function kind(patch, key) {
-  if(!(key in patch.do) && !(key in patch.undo)) {
-    return "kept"
+  if (!(key in patch.do) && !(key in patch.undo)) {
+    return "kept";
   } else if (patch.do[key] === undefined && patch.undo[key] !== undefined) {
-    return "deleted"
+    return "deleted";
   } else if (patch.do[key] !== undefined && patch.undo[key] === undefined) {
-    return "added"
+    return "added";
   } else {
-    return "updated"
+    return "updated";
   }
 }
 ```
 
 Here we are testing all the possibilities, by making a simple statement :
+
 > If for performing the do patch I need to make undefined the value and to apply
 > the undo patch I need a value, so at start I deleted the value
 
 As you see, we can simplify the statement with :
+
 > If for performing the do patch I need to make undefined the value,
 > so at start I deleted the value
 
@@ -242,14 +252,14 @@ So, a more simple kind function could be the following one.
 
 ```js
 function kind(patch, key) {
-  if(!(key in patch.do) && !(key in patch.undo)) {
-    return "kept"
+  if (!(key in patch.do) && !(key in patch.undo)) {
+    return "kept";
   } else if (patch.do[key] === undefined) {
-    return "deleted"
+    return "deleted";
   } else if (patch.undo[key] === undefined) {
-    return "added"
+    return "added";
   } else {
-    return "updated"
+    return "updated";
   }
 }
 ```
@@ -261,12 +271,12 @@ arrays are objects. T(a)rdis is aware of all array properties and will perform
 diff checking that allow you to reconscruct an array with ease.
 
 ```js
-const past = [1, 2, 3]
-const future = [1, 2, 3, 4]
+const past = [1, 2, 3];
+const future = [1, 2, 3, 4];
 
-const present = diff(past, future)
+const present = diff(past, future);
 
-const future = Array.from({ ...past, ...present.do })
+const future = Array.from({ ...past, ...present.do });
 // present: (4)[1, 2, 3, 4]
 ```
 
@@ -275,13 +285,16 @@ const future = Array.from({ ...past, ...present.do })
 Just as said earlier, T(a)rdis help you to obtain a patch representing the
 differences between two objects.
 
-Now, we are able to make a simple statement : 
+Now, we are able to make a simple statement :
+
 > If the diff of two objects is empty, this is because the two objects are equals!
 
 ```js
-function equality (a, b) {
-  const patch = diff(a, b)
-  return Object.keys(patch.do).length === 0 && Object.keys(patch.undo).length === 0
+function equality(a, b) {
+  const patch = diff(a, b);
+  return (
+    Object.keys(patch.do).length === 0 && Object.keys(patch.undo).length === 0
+  );
 }
 ```
 
@@ -293,13 +306,12 @@ a lot of amuzing kind of operation on you object.
 For example, you are able to create a copy of your source object, apply and undoing the patch!
 
 ```js
-const from = { a: 1, b: 2 }
-const patch = diff(from, {})
+const from = { a: 1, b: 2 };
+const patch = diff(from, {});
 
-const copy = { ...from, ...patch.do, ...patch.undo }
+const copy = { ...from, ...patch.do, ...patch.undo };
 // copy: { a: 1, b:2 }
 ```
-
 
 **Pretty easy! Now, add yours!**
 
