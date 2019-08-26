@@ -8,7 +8,7 @@ export function diff(from, to, deep) {
   for (var key in to) {
     if (key in done || from[key] === to[key]) continue
 
-    if (deep && (typeof from[key] === "object" || typeof to[key] === "object")) {
+    if (deep && (typeof from[key] === "object" && typeof to[key] === "object")) {
       var deep_patch = diff(from[key], to[key], deep)
 
       if (Object.keys(deep_patch.do).length) {

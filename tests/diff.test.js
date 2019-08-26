@@ -345,3 +345,125 @@ describe("array", () => {
     expect(Array.from({ ...to, ...patch.undo })).toEqual(from)
   })
 })
+
+describe("empty", () => {
+  test("empty from", () => {
+    const from = {}
+
+    const to = { a: 1 }
+
+    const patch = diff(from, to)
+
+    expect(patch.do).toEqual(to)
+
+    expect(patch.undo).toEqual({
+      a: undefined
+    })
+
+    expect({ ...from, ...patch.do }).toEqual(to)
+
+    expect({ ...to, ...patch.undo }).toEqual(from)
+  })
+
+  test("empty to", () => {
+    const from = { a: 1 }
+
+    const to = {}
+
+    const patch = diff(from, to)
+
+    expect(patch.do).toEqual({
+      a: undefined
+    })
+
+    expect(patch.undo).toEqual(from)
+
+    expect({ ...from, ...patch.do }).toEqual(to)
+
+    expect({ ...to, ...patch.undo }).toEqual(from)
+  })
+})
+
+describe("empty array", () => {
+  test("empty from", () => {
+    const from = []
+
+    const to = [1]
+
+    const patch = diff(from, to)
+
+    expect(patch.do).toEqual({
+      0: 1,
+      length: 1
+    })
+
+    expect(patch.undo).toEqual({
+      0: undefined,
+      length: 0
+    })
+
+    expect(Array.from({ ...from, ...patch.do })).toEqual(to)
+
+    expect(Array.from({ ...to, ...patch.undo })).toEqual(from)
+  })
+
+  test("empty to", () => {
+    const from = [1]
+
+    const to = []
+
+    const patch = diff(from, to)
+
+    expect(patch.do).toEqual({
+      0: undefined,
+      length: 0
+    })
+
+    expect(patch.undo).toEqual({
+      0: 1,
+      length: 1
+    })
+
+    expect(Array.from({ ...from, ...patch.do })).toEqual(to)
+
+    expect(Array.from({ ...to, ...patch.undo })).toEqual(from)
+  })
+})
+
+describe("deep empty", () => {
+  test("deep empty object", () => {
+    const from = {}
+
+    const to = { a: { b: 1 } }
+
+    const patch = diff(from, to, true)
+
+    expect(patch.do).toEqual(to)
+
+    expect(patch.undo).toEqual({
+      a: undefined
+    })
+
+    expect({ ...from, ...patch.do }).toEqual(to)
+
+    expect({ ...to, ...patch.undo }).toEqual(from)
+  })
+
+  test("deep empty array", () => {
+    const from = {}
+
+    const to = { a: [1] }
+
+    const patch = diff(from, to, true)
+
+    expect(patch.do).toEqual(to)
+
+    expect(patch.undo).toEqual({
+      a: undefined
+    })
+
+    expect({ ...from, ...patch.do }).toEqual(to)
+
+    expect({ ...to, ...patch.undo }).toEqual(from)
+  })
+})
